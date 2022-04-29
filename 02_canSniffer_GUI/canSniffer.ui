@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1202</width>
-    <height>788</height>
+    <width>1440</width>
+    <height>846</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,8 +22,13 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>CanSniffer # canDrive 2020</string>
+   <string>CanSniffer # canDrive 2022</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -53,7 +58,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>9</pointsize>
            </font>
           </property>
           <property name="title">
@@ -82,7 +87,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -106,7 +111,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
             </widget>
@@ -127,7 +132,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -154,7 +159,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -169,7 +174,7 @@
          <widget class="QGroupBox" name="groupBox_5">
           <property name="font">
            <font>
-            <pointsize>10</pointsize>
+            <pointsize>9</pointsize>
            </font>
           </property>
           <property name="title">
@@ -191,7 +196,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>10</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -202,7 +207,7 @@
              <item>
               <widget class="QComboBox" name="activeChannelComboBox">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -218,7 +223,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>10</pointsize>
+                 <pointsize>9</pointsize>
                 </font>
                </property>
                <item>
@@ -261,7 +266,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>10</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -285,7 +290,7 @@
                </property>
                <property name="font">
                 <font>
-                 <pointsize>10</pointsize>
+                 <pointsize>9</pointsize>
                 </font>
                </property>
                <property name="maximum">
@@ -308,7 +313,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="layoutDirection">
@@ -332,7 +337,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="layoutDirection">
@@ -340,6 +345,9 @@
              </property>
              <property name="text">
               <string>Show TX table</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -353,7 +361,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="layoutDirection">
@@ -384,7 +392,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -407,7 +415,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="title">
@@ -439,7 +447,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <pointsize>10</pointsize>
             </font>
            </property>
            <property name="text">
@@ -466,7 +474,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <pointsize>10</pointsize>
             </font>
            </property>
            <property name="text">
@@ -503,7 +511,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <pointsize>10</pointsize>
             </font>
            </property>
            <property name="text">
@@ -530,7 +538,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <pointsize>10</pointsize>
             </font>
            </property>
            <property name="text">
@@ -567,7 +575,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="currentIndex">
@@ -581,7 +589,7 @@
           <item>
            <widget class="QTableWidget" name="mainMessageTableWidget">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -731,14 +739,14 @@
           <item>
            <widget class="QScrollArea" name="scrollArea_2">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>320</width>
+              <width>400</width>
               <height>0</height>
              </size>
             </property>
@@ -749,9 +757,9 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
-               <width>311</width>
-               <height>548</height>
+               <y>-164</y>
+               <width>401</width>
+               <height>553</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -771,7 +779,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -801,7 +809,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>10</pointsize>
+                  <pointsize>9</pointsize>
                  </font>
                 </property>
                 <property name="title">
@@ -827,7 +835,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -854,7 +862,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -886,7 +894,7 @@
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>11</pointsize>
+                       <pointsize>10</pointsize>
                       </font>
                      </property>
                      <property name="text">
@@ -907,7 +915,7 @@
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>10</pointsize>
+                       <pointsize>9</pointsize>
                       </font>
                      </property>
                      <property name="value">
@@ -949,7 +957,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -982,7 +990,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
+                     <pointsize>9</pointsize>
                     </font>
                    </property>
                    <property name="placeholderText">
@@ -1006,7 +1014,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1039,7 +1047,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
+                     <pointsize>9</pointsize>
                     </font>
                    </property>
                    <property name="placeholderText">
@@ -1060,7 +1068,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1093,7 +1101,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>10</pointsize>
+                  <pointsize>9</pointsize>
                  </font>
                 </property>
                 <property name="autoFillBackground">
@@ -1139,7 +1147,7 @@
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>11</pointsize>
+                       <pointsize>10</pointsize>
                       </font>
                      </property>
                      <property name="text">
@@ -1169,7 +1177,7 @@
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>10</pointsize>
+                       <pointsize>9</pointsize>
                       </font>
                      </property>
                      <property name="placeholderText">
@@ -1199,7 +1207,7 @@
                      </property>
                      <property name="font">
                       <font>
-                       <pointsize>10</pointsize>
+                       <pointsize>9</pointsize>
                       </font>
                      </property>
                      <property name="placeholderText">
@@ -1238,7 +1246,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="layoutDirection">
@@ -1256,7 +1264,7 @@
                <widget class="QGroupBox" name="groupBox_7">
                 <property name="font">
                  <font>
-                  <pointsize>10</pointsize>
+                  <pointsize>9</pointsize>
                  </font>
                 </property>
                 <property name="title">
@@ -1285,7 +1293,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1326,7 +1334,7 @@
                    <property name="font">
                     <font>
                      <family>MS Shell Dlg 2</family>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1344,7 +1352,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1387,13 +1395,6 @@
              </layout>
             </widget>
            </widget>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_9">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-           </layout>
           </item>
          </layout>
         </widget>
@@ -1594,7 +1595,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>11</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1618,7 +1619,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>11</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1690,7 +1691,7 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
              </font>
             </property>
             <property name="title">
@@ -1714,7 +1715,7 @@
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>11</pointsize>
+                     <pointsize>10</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1750,7 +1751,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>11</pointsize>
+                   <pointsize>10</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1808,7 +1809,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="layoutDirection">
@@ -1899,7 +1900,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -1929,7 +1930,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -1942,6 +1943,18 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>35</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -1950,7 +1963,7 @@
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
@@ -1964,7 +1977,7 @@
               <widget class="QCheckBox" name="repeatedDelayCheckBox">
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
+                 <pointsize>10</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -1976,7 +1989,7 @@
               <widget class="QSpinBox" name="repeatTxDelayValue">
                <property name="font">
                 <font>
-                 <pointsize>10</pointsize>
+                 <pointsize>9</pointsize>
                 </font>
                </property>
                <property name="maximum">
@@ -2004,7 +2017,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>10</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="title">
@@ -2036,7 +2049,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="text">
@@ -2075,7 +2088,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="verticalScrollBarPolicy">
@@ -2105,7 +2118,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="text">
@@ -2141,7 +2154,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="text">
@@ -2168,7 +2181,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="mouseTracking">
@@ -2204,7 +2217,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="text">
@@ -2231,7 +2244,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="text">
@@ -2243,7 +2256,7 @@
           <widget class="QPushButton" name="showControlsButton">
            <property name="font">
             <font>
-             <pointsize>11</pointsize>
+             <pointsize>10</pointsize>
             </font>
            </property>
            <property name="text">

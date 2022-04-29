@@ -12,9 +12,6 @@ import serial.tools.list_ports
 import sys
 import os
 import time
-import qtmodern
-from qtmodern import styles
-from qtmodern import windows
 import csv
 
 import HideOldPackets
@@ -97,7 +94,7 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         self.decodedMessagesTableWidget.setColumnWidth(1, 150)
         self.decodedMessagesTableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.txTable.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
-        self.showFullScreen()
+        self.sendingGroupBox.show()
 
     def stopPlayBackCallback(self):
         try:
@@ -510,19 +507,8 @@ def main():
     app = QApplication(sys.argv)
     gui = canSnifferGUI()
 
-    #applying dark theme
-    qtmodern.styles.dark(app)
-    darked_gui = qtmodern.windows.ModernWindow(gui)
-
-    # adding a grip to the top left corner to make the frameless window resizable
-    layout = QVBoxLayout()
-    sizegrip = QSizeGrip(darked_gui)
-    sizegrip.setMaximumSize(30, 30)
-    layout.addWidget(sizegrip, 50, Qt.AlignBottom | Qt.AlignRight)
-    darked_gui.setLayout(layout)
-
     #starting the app
-    darked_gui.show()
+    gui.show()
     app.exec_()
 
 
