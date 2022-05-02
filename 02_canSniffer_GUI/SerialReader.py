@@ -41,8 +41,8 @@ class SerialReaderThread(QThread):
                 # Disconnect of USB->UART occured
                 print("Serial disconnected")
                 print(e)
-                self.port.close()
+                self.isRunning = False
             else:
                 if len(data):
                     self.buf.extend(data)
-        self.msleep(100)
+        self.msleep(10)

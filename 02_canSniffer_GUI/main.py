@@ -1,7 +1,10 @@
-# canDrive @ 2020
+#----------------------------------------------------------------
+# canSniffer 2022
+# Based on canDrive 2020
 # To create a one-file executable, call: pyinstaller -F main.spec
 #----------------------------------------------------------------
 import serial
+import can
 import canSniffer_ui
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView, QFileDialog, QRadioButton
 from PyQt5.QtWidgets import QVBoxLayout, QSizeGrip
@@ -17,6 +20,8 @@ import csv
 import HideOldPackets
 import SerialReader
 import SerialWriter
+import canReader
+import canWriter
 import FileLoader
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
@@ -27,8 +32,8 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         super(canSnifferGUI, self).__init__()
         self.setupUi(self)
         self.portScanButton.clicked.connect(self.scanPorts)
-        self.portConnectButton.clicked.connect(self.serialPortConnect)
-        self.portDisconnectButton.clicked.connect(self.serialPortDisconnect)
+        self.portConnectButton.clicked.connect(self.portConnect)
+        self.portDisconnectButton.clicked.connect(self.portDisconnect)
         self.startSniffingButton.clicked.connect(self.startSniffing)
         self.stopSniffingButton.clicked.connect(self.stopSniffing)
         self.saveSelectedIdInDictButton.clicked.connect(self.saveIdLabelToDictCallback)
@@ -37,7 +42,6 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         self.showOnlyIdsLineEdit.textChanged.connect(self.showOnlyIdsTextChanged)
         self.hideIdsLineEdit.textChanged.connect(self.hideIdsTextChanged)
         self.clearLabelDictButton.clicked.connect(self.clearLabelDict)
-        self.serialController = serial.Serial()
         self.mainMessageTableWidget.cellClicked.connect(self.cellWasClicked)
         self.newTxTableRow.clicked.connect(self.newTxTableRowCallback)
         self.removeTxTableRow.clicked.connect(self.removeTxTableRowCallback)
@@ -54,9 +58,8 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         self.hideAllPacketsButton.clicked.connect(self.hideAllPackets)
         self.showControlsButton.hide()
 
-        self.serialWriterThread = SerialWriter.SerialWriterThread(self.serialController)
-        self.serialReaderThread = SerialReader.SerialReaderThread(self.serialController)
-        self.serialReaderThread.receivedPacketSignal.connect(self.serialPacketReceiverCallback)
+        self.portList = {}
+        self.interface = ''
         self.fileLoaderThread = FileLoader.FileLoaderThread()
         self.fileLoaderThread.newRowSignal.connect(self.mainTablePopulatorCallback)
         self.fileLoaderThread.loadingFinishedSignal.connect(self.fileLoadingFinishedCallback)
@@ -98,10 +101,10 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
 
     def stopPlayBackCallback(self):
         try:
-            self.serialWriterThread.packetSentSignal.disconnect()
+            self.canWriterThread.packetSentSignal.disconnect()
         except:
             pass
-        self.serialWriterThread.clearQueues()
+        self.canWriterThread.clearQueues()
         self.playbackMainTableButton.setVisible(True)
         self.stopPlayBackButton.setVisible(False)
         self.playBackProgressBar.setVisible(False)
@@ -140,20 +143,20 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
             if '.' not in self.mainMessageTableWidget.item(row, 0).text():
                 sec_to_ms = 1       # timestamp already in ms
             dt = abs(int(dt * sec_to_ms))
-            self.serialWriterThread.setNormalWriteDelay(dt)
+            self.canWriterThread.setNormalWriteDelay(dt)
         self.playBackProgressBar.setValue(int((maxRows - row) / maxRows * 100))
         self.playbackMainTableIndex -= 1
 
-        self.serialWriterThread.write(txBuf)
+        self.canWriterThread.write(' ' + txBuf)
 
     def playbackMainTableCallback(self):
         self.playbackMainTableButton.setVisible(False)
         self.stopPlayBackButton.setVisible(True)
         self.playBackProgressBar.setVisible(True)
         self.playbackMainTableIndex = self.mainMessageTableWidget.rowCount() - 1
-        self.serialWriterThread.setRepeatedWriteDelay(0)
+        self.canWriterThread.setRepeatedWriteDelay(0)
         print('playing back...')
-        self.serialWriterThread.packetSentSignal.connect(self.playbackMainTable1Packet)
+        self.canWriterThread.packetSentSignal.connect(self.playbackMainTable1Packet)
         self.playbackMainTable1Packet()
 
     def clearTableCallback(self):
@@ -219,9 +222,9 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                 self.mainMessageTableWidget.setRowHidden(i, True)
 
     def sendTxTableCallback(self):
-        self.setRadioButton(self.txDataRadioButton, 2)
         for row in range(self.txTable.rowCount()):
             if self.txTable.item(row, 0).isSelected():
+                self.setRadioButton(self.txDataRadioButton, 1)
                 txBuf = ""
                 for i in range(self.txTable.columnCount()):
                     subStr = self.txTable.item(row, i).text() + ","
@@ -230,10 +233,12 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                     txBuf += subStr
                 txBuf = txBuf[:-1] + '\n'
                 if self.repeatedDelayCheckBox.isChecked():
-                    self.serialWriterThread.setRepeatedWriteDelay(self.repeatTxDelayValue.value())
+                    self.canWriterThread.setRepeatedWriteDelay(self.repeatTxDelayValue.value())
                 else:
-                    self.serialWriterThread.setRepeatedWriteDelay(0)
-                self.serialWriterThread.write(txBuf)
+                    self.canWriterThread.setRepeatedWriteDelay(0)
+                self.canWriterThread.write(' ' + txBuf)
+                self.setRadioButton(self.txDataRadioButton, 0)
+
 
     def fileLoadingFinishedCallback(self):
         self.abortSessionLoadingButton.setEnabled(False)
@@ -422,10 +427,8 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         self.sendTxTableButton.setEnabled(True)
         self.activeChannelComboBox.setEnabled(False)
 
-        if self.activeChannelComboBox.isEnabled():
-            txBuf = [0x42, self.activeChannelComboBox.currentIndex()]   # TX FORWARDER
-            self.serialWriterThread.write(txBuf)
-            txBuf = [0x41, 1 << self.activeChannelComboBox.currentIndex()]  # RX FORWARDER
+        if self.interface == 'serial':
+            txBuf = [ord('C'), self.activeChannelComboBox.currentIndex(), ord('\n')]
             self.serialWriterThread.write(txBuf)
 
         self.startTime = time.time()
@@ -436,6 +439,9 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         self.sendTxTableButton.setEnabled(False)
         self.activeChannelComboBox.setEnabled(True)
         self.setRadioButton(self.rxDataRadioButton, 0)
+        if self.interface == 'serial':
+            txBuf = [ord('D'), ord('\n')] 
+            self.serialWriterThread.write(txBuf)
 
     def serialPacketReceiverCallback(self, packet, time):
         if self.startSniffingButton.isEnabled():
@@ -443,7 +449,7 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         packetSplit = packet[:-1].split(',')
 
         if len(packetSplit) != 4:
-            print("wrong packet!" + packet)
+            print("wrong packet: " + packet)
             self.snifferMsgPlainTextEdit.document().setPlainText(packet)
             return
 
@@ -456,41 +462,82 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
 
         self.mainTablePopulatorCallback(rowData)
 
-    def serialPortConnect(self):
-        try:
-            self.serialController.port = self.portSelectorComboBox.currentText()
-            self.serialController.baudrate = 250000
-            self.serialController.open()
-            self.serialReaderThread.start()
-            self.serialWriterThread.start()
-            self.serialConnectedCheckBox.setChecked(True)
-            self.portDisconnectButton.setEnabled(True)
-            self.portConnectButton.setEnabled(False)
-            self.startSniffingButton.setEnabled(True)
-            self.stopSniffingButton.setEnabled(False)
-        except serial.SerialException as e:
-            print('Error opening port: ' + str(e))
+    def portConnect(self):
+        if self.portList[self.portSelectorComboBox.currentText()] == 'serial':
+            try:
+                self.busController = serial.Serial()
+                self.serialWriterThread = SerialWriter.SerialWriterThread(self.busController)
+                self.serialReaderThread = SerialReader.SerialReaderThread(self.busController)
+                self.serialReaderThread.receivedPacketSignal.connect(self.serialPacketReceiverCallback)
+                self.busController.port = self.portSelectorComboBox.currentText()
+                self.busController.baudrate = 250000
+                self.busController.open()
+                self.serialReaderThread.start()
+                self.serialWriterThread.start()
+                self.serialConnectedCheckBox.setChecked(True)
+                self.portDisconnectButton.setEnabled(True)
+                self.portConnectButton.setEnabled(False)
+                self.startSniffingButton.setEnabled(True)
+                self.stopSniffingButton.setEnabled(False)
+                self.interface = 'serial'
+            except serial.SerialException as e:
+                print('Error opening port: ' + str(e))
+        elif self.portList[self.portSelectorComboBox.currentText()] == 'socketcan':
+            try:
+                self.busController = can.Bus(bustype="socketcan", channel=self.portSelectorComboBox.currentText())
+                self.canWriterThread = canWriter.canWriterThread(self.busController)
+                self.canReaderThread = canReader.canReaderThread(self.busController)
+                self.canReaderThread.receivedPacketSignal.connect(self.serialPacketReceiverCallback)
+                self.canReaderThread.start()
+                self.canWriterThread.start()
+                self.serialConnectedCheckBox.setChecked(True)
+                self.portDisconnectButton.setEnabled(True)
+                self.portConnectButton.setEnabled(False)
+                self.startSniffingButton.setEnabled(True)
+                self.stopSniffingButton.setEnabled(False)
+                self.interface = 'can'
+            except serial.SerialException as e:
+                print('Error opening port: ' + str(e))
+        else:
+            print("No bus handler for: {}".format(self.portList[self.portSelectorComboBox.currentText()]))
 
-    def serialPortDisconnect(self):
+    def portDisconnect(self):
         if self.stopSniffingButton.isEnabled():
             self.stopSniffing()
-        try:
-            self.serialReaderThread.stop()
-            self.serialWriterThread.stop()
-            self.portDisconnectButton.setEnabled(False)
-            self.portConnectButton.setEnabled(True)
-            self.startSniffingButton.setEnabled(False)
-            self.serialConnectedCheckBox.setChecked(False)
-            self.serialController.close()
-        except serial.SerialException as e:
-            print('Error closing port: ' + str(e))
+        if self.interface == 'serial':
+            try:
+                self.serialReaderThread.stop()
+                self.serialWriterThread.stop()
+                self.portDisconnectButton.setEnabled(False)
+                self.portConnectButton.setEnabled(True)
+                self.startSniffingButton.setEnabled(False)
+                self.serialConnectedCheckBox.setChecked(False)
+                self.busController.close()
+            except serial.SerialException as e:
+                print('Error closing port: ' + str(e))
+        elif self.interface == 'can':
+            try:
+                self.canReaderThread.stop()
+                self.canWriterThread.stop()
+                self.portDisconnectButton.setEnabled(False)
+                self.portConnectButton.setEnabled(True)
+                self.startSniffingButton.setEnabled(False)
+                self.serialConnectedCheckBox.setChecked(False)
+                self.busController.shutdown()
+            except Exception as e:
+                print('Error closing port: ' + str(e))
 
     def scanPorts(self):
         self.portSelectorComboBox.clear()
+        vcanPorts = can.detect_available_configs()
+        for it in vcanPorts:
+            self.portSelectorComboBox.addItem(it['channel'])
+            self.portList[it['channel']] = it['interface']
         comPorts = serial.tools.list_ports.comports()
         nameList = list(port.device for port in comPorts)
         for name in nameList:
             self.portSelectorComboBox.addItem(name)
+            self.portList[name] = 'serial'
 
 
 def exception_hook(exctype, value, traceback):

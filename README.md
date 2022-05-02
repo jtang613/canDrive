@@ -1,4 +1,4 @@
-# canDrive
+# canSniffer
 Tools for hacking your car. Please concider checking out the tutorials made about this project:
 https://www.youtube.com/playlist?list=PLNiFaO8hU1z0o_6DSxk-jcVAM3UCUR-pY
 

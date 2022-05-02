@@ -28,7 +28,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>CanSniffer # canDrive 2022</string>
+   <string>CanSniffer 2022</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -239,6 +239,11 @@
                <item>
                 <property name="text">
                  <string>CAN_H</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>RANDOM</string>
                 </property>
                </item>
               </widget>

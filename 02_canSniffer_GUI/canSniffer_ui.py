@@ -134,6 +134,7 @@ class Ui_MainWindow(object):
         self.activeChannelComboBox.addItem("")
         self.activeChannelComboBox.addItem("")
         self.activeChannelComboBox.addItem("")
+        self.activeChannelComboBox.addItem("")
         self.horizontalLayout_5.addWidget(self.activeChannelComboBox)
         self.horizontalLayout_6.addLayout(self.horizontalLayout_5)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -1086,7 +1087,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "CanSniffer # canDrive 2022"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "CanSniffer 2022"))
         self.groupBox.setTitle(_translate("MainWindow", "Serial connection"))
         self.portScanButton.setText(_translate("MainWindow", "Scan"))
         self.portConnectButton.setText(_translate("MainWindow", "Connect"))
@@ -1096,6 +1097,7 @@ class Ui_MainWindow(object):
         self.activeChannelComboBox.setItemText(0, _translate("MainWindow", "CAN_L"))
         self.activeChannelComboBox.setItemText(1, _translate("MainWindow", "CAN_M"))
         self.activeChannelComboBox.setItemText(2, _translate("MainWindow", "CAN_H"))
+        self.activeChannelComboBox.setItemText(3, _translate("MainWindow", "RANDOM"))
         self.label.setText(_translate("MainWindow", "Playback delay "))
         self.autoclearCheckBox.setText(_translate("MainWindow", "Auto clear"))
         self.showSendingTableCheckBox.setText(_translate("MainWindow", "Show TX table"))

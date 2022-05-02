@@ -20,9 +20,6 @@
 //------------------------------------------------------------------------------
 #include <CAN.h>
 //------------------------------------------------------------------------------
-// Settings
-#define RANDOM_CAN 1
-#define CAN_SPEED (500E3) //LOW=33E3, MID=95E3, HIGH=500E3 (for Vectra)
 //------------------------------------------------------------------------------
 // Inits, globals
 typedef struct {
@@ -32,6 +29,9 @@ typedef struct {
   byte dlc;
   byte dataArray[20];
 } packet_t;
+
+int mode = 0;
+//int can_speed = 0;
 
 const char SEPARATOR = ',';
 const char TERMINATOR = '\n';
@@ -118,6 +118,19 @@ void sendPacketToCan(packet_t * packet) {
     }
   }
 }
+
+void setCAN(long can_speed) {
+  CAN.end();
+  delay(10);
+  if (!CAN.begin(can_speed)) {
+    Serial.println("Starting CAN failed!");
+//    while (1);
+  }
+  // register the receive callback
+  CAN.onReceive(onCANReceive);
+  Serial.println("CAN RX TX Started");
+  
+}
 //------------------------------------------------------------------------------
 // Serial parser
 char getNum(char c) {
@@ -159,17 +172,18 @@ void rxParse(char * buf, int len) {
   // DATA
   ptr = strToHex(ptr + 1, rxPacket.dataArray, &rxPacket.dlc);
 
-#if RANDOM_CAN == 1
-  // echo back
-  printPacket(&rxPacket);
-#else
-  sendPacketToCan(&rxPacket);
-#endif
+  if (mode >= 4) {
+    // echo back
+    printPacket(&rxPacket);
+  } else {
+    sendPacketToCan(&rxPacket);
+  }
 }
 
 void RXcallback(void) {
   static int rxPtr = 0;
   static char rxBuf[RXBUF_LEN];
+  static long can_speed = 0;
 
   while (Serial.available() > 0) {
     if (rxPtr >= RXBUF_LEN) {
@@ -178,7 +192,40 @@ void RXcallback(void) {
     char c = Serial.read();
     rxBuf[rxPtr++] = c;
     if (c == TERMINATOR) {
-      rxParse(rxBuf, rxPtr);
+      switch(rxBuf[0]) {
+        case 'C':
+          mode = rxBuf[1] + 1;
+          Serial.print("Start sniffing: ");
+          Serial.println(mode);
+          switch(mode) {
+            case 1:
+              can_speed = 33e3;
+              break;
+            case 2:
+              can_speed = 95e3;
+              break;
+            case 3:
+              can_speed = 500e3;
+              break;
+            case 4:
+              randomSeed(12345);
+              Serial.println("randomCAN started.");
+              can_speed = 0;
+              break;
+            default:
+              break;
+          }
+          setCAN(can_speed);
+          break;
+        case 'D':
+          Serial.println("Stop sniffing.");
+          mode = 0;
+          break;
+        default:
+          Serial.println("Send packet.");
+          rxParse(rxBuf+1, rxPtr-1);
+          break;
+      }
       rxPtr = 0;
     }
   }
@@ -191,26 +238,15 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-
-#if RANDOM_CAN == 1
-  randomSeed(12345);
-  Serial.println("randomCAN Started");
-#else
-  if (!CAN.begin(CAN_SPEED)) {
-    Serial.println("Starting CAN failed!");
-    while (1);
-  }
-  // register the receive callback
-  CAN.onReceive(onCANReceive);
-  Serial.println("CAN RX TX Started");
+#if 0
 #endif
 }
 //------------------------------------------------------------------------------
 // Main
 void loop() {
   RXcallback();
-#if RANDOM_CAN == 1
-  CANsimulate();
-  delay(100);
-#endif
+  if (mode == 4) {
+    CANsimulate();
+    delay(100);
+  }
 }
