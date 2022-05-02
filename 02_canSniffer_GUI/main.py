@@ -1,7 +1,7 @@
 #----------------------------------------------------------------
 # canSniffer 2022
 # Based on canDrive 2020
-# To create a one-file executable, call: pyinstaller -F main.spec
+# To create a one-file executable, call: pyinstaller main.spec
 #----------------------------------------------------------------
 import serial
 import can

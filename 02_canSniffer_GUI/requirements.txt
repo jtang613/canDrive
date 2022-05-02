@@ -1,3 +1,4 @@
 PySerial
+can
 PyQt5
 PyQt5-tools

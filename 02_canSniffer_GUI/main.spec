@@ -3,15 +3,14 @@ import os
 from PyInstaller.utils.hooks import collect_data_files
 
 spec_root = os.path.abspath(SPECPATH) 
-qtmodern_data = collect_data_files('qtmodern')
 
 block_cipher = None
 
 a = Analysis(['main.py'],
              pathex=[spec_root],
              binaries=[],
-             datas= qtmodern_data,
-             hiddenimports=['PyQt5', 'Pyserial', 'PyQt5-tools', 'qtmodern'],
+             datas=[],
+             hiddenimports=['PyQt5', 'Pyserial', 'PyQt5-tools', 'can'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
