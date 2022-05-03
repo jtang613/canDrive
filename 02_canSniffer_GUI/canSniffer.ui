@@ -630,8 +630,14 @@
              <enum>Qt::DotLine</enum>
             </property>
             <property name="sortingEnabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
             <attribute name="verticalHeaderStretchLastSection">
              <bool>false</bool>
             </attribute>
@@ -762,8 +768,8 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-164</y>
-               <width>401</width>
+               <y>0</y>
+               <width>382</width>
                <height>553</height>
               </rect>
              </property>
@@ -1451,6 +1457,12 @@
               <property name="sortingEnabled">
                <bool>true</bool>
               </property>
+              <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+               <bool>true</bool>
+              </attribute>
               <attribute name="verticalHeaderStretchLastSection">
                <bool>false</bool>
               </attribute>
@@ -1668,6 +1680,9 @@
             <property name="sortingEnabled">
              <bool>true</bool>
             </property>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>true</bool>
+            </attribute>
             <column>
              <property name="text">
               <string>ID</string>
@@ -1848,13 +1863,13 @@
             <enum>QAbstractItemView::SelectRows</enum>
            </property>
            <property name="sortingEnabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="rowCount">
             <number>0</number>
            </property>
            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </attribute>
            <column>
             <property name="text">

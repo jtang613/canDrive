@@ -479,12 +479,13 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                 self.portConnectButton.setEnabled(False)
                 self.startSniffingButton.setEnabled(True)
                 self.stopSniffingButton.setEnabled(False)
+                self.portSelectorComboBox.setEnabled(False)
                 self.interface = 'serial'
             except serial.SerialException as e:
                 print('Error opening port: ' + str(e))
-        elif self.portList[self.portSelectorComboBox.currentText()] == 'socketcan':
+        elif self.portList[self.portSelectorComboBox.currentText()] in ['socketcan','virtual']:
             try:
-                self.busController = can.Bus(bustype="socketcan", channel=self.portSelectorComboBox.currentText())
+                self.busController = can.Bus(bustype=self.portList[self.portSelectorComboBox.currentText()], channel=self.portSelectorComboBox.currentText())
                 self.canWriterThread = canWriter.canWriterThread(self.busController)
                 self.canReaderThread = canReader.canReaderThread(self.busController)
                 self.canReaderThread.receivedPacketSignal.connect(self.serialPacketReceiverCallback)
@@ -495,6 +496,7 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                 self.portConnectButton.setEnabled(False)
                 self.startSniffingButton.setEnabled(True)
                 self.stopSniffingButton.setEnabled(False)
+                self.portSelectorComboBox.setEnabled(False)
                 self.interface = 'can'
             except serial.SerialException as e:
                 print('Error opening port: ' + str(e))
@@ -512,6 +514,7 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                 self.portConnectButton.setEnabled(True)
                 self.startSniffingButton.setEnabled(False)
                 self.serialConnectedCheckBox.setChecked(False)
+                self.portSelectorComboBox.setEnabled(True)
                 self.busController.close()
             except serial.SerialException as e:
                 print('Error closing port: ' + str(e))
@@ -523,6 +526,7 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                 self.portConnectButton.setEnabled(True)
                 self.startSniffingButton.setEnabled(False)
                 self.serialConnectedCheckBox.setChecked(False)
+                self.portSelectorComboBox.setEnabled(True)
                 self.busController.shutdown()
             except Exception as e:
                 print('Error closing port: ' + str(e))
