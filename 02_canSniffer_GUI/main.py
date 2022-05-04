@@ -233,10 +233,19 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                     txBuf += subStr
                 txBuf = txBuf[:-1] + '\n'
                 if self.repeatedDelayCheckBox.isChecked():
-                    self.canWriterThread.setRepeatedWriteDelay(self.repeatTxDelayValue.value())
+                    if self.interface == 'serial':
+                        self.serialWriterThread.setRepeatedWriteDelay(self.repeatTxDelayValue.value())
+                    else:
+                        self.canWriterThread.setRepeatedWriteDelay(self.repeatTxDelayValue.value())
                 else:
-                    self.canWriterThread.setRepeatedWriteDelay(0)
-                self.canWriterThread.write(' ' + txBuf)
+                    if self.interface == 'serial':
+                        self.serialWriterThread.setRepeatedWriteDelay(0)
+                    else:
+                        self.canWriterThread.setRepeatedWriteDelay(0)
+                if self.interface == 'serial':
+                    self.serialWriterThread.write(' ' + txBuf)
+                else:
+                    self.canWriterThread.write(' ' + txBuf)
                 self.setRadioButton(self.txDataRadioButton, 0)
 
 
