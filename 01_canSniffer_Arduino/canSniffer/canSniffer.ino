@@ -120,13 +120,13 @@ void sendPacketToCan(packet_t * packet) {
 }
 
 void setCAN(long can_speed) {
-  CAN.end();
   delay(10);
   if (!CAN.begin(can_speed)) {
     Serial.println("Starting CAN failed!");
 //    while (1);
   }
   // register the receive callback
+  delay(10);
   CAN.onReceive(onCANReceive);
   Serial.println("CAN RX TX Started");
   
@@ -199,10 +199,10 @@ void RXcallback(void) {
           Serial.println(mode);
           switch(mode) {
             case 1:
-              can_speed = 33e3;
+              can_speed = 125e3;
               break;
             case 2:
-              can_speed = 95e3;
+              can_speed = 250e3;
               break;
             case 3:
               can_speed = 500e3;
@@ -238,6 +238,8 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
+  CAN.setClockFrequency(8e6);
+
 #if 0
 #endif
 }
